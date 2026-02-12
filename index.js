@@ -1,5 +1,6 @@
 import express from "express";
 import userRoutes from "./Routes/userRoutes.js";
+import postRoutes from "./Routes/postRoutes.js";
 
 const app = express();
 app.use(express.json());
@@ -12,15 +13,10 @@ app.use(express.json());
 //   next();
 // });
 
-
-
 app.use("/users", userRoutes);
-app.use("/products", userRoutes);
+app.use("/posts", postRoutes);
 
-
-
-
-const PORT = 3001;
+const PORT = 3000;
 app.listen(PORT, () => {
-  console.log("Server is running on Port 3001");
+  console.log("Server is running on Port 3000");
 });

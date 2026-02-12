@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "url": "https://www.xcitium.com/blog/wp-content/uploads/2025/07/whats-a-url.png",
+    "title": "Post Title One",
+    "shortContent": "Short description of the post goes here. This is a preview text.",
+    "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum nihil natus ut nobis laudantium beatae sed autem, voluptates earum fuga culpa sunt temporibus cum rerum voluptatum reprehenderit, veniam architecto possimus. "
+  },
+  {
+    "id": 2,
+    "url": "https://www.xcitium.com/blog/wp-content/uploads/2025/07/whats-a-url.png",
+    "title": "Post Title Two",
+    "shortContent": "Short description of the post goes here. This is a preview text.",
+    "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum nihil natus ut nobis laudantium beatae sed autem, voluptates earum fuga culpa sunt temporibus cum rerum voluptatum reprehenderit, veniam architecto possimus. "
+  },
+  {
+    "id": 3,
+    "url": "https://www.xcitium.com/blog/wp-content/uploads/2025/07/whats-a-url.png",
+    "title": "Post Title Three",
+    "shortContent": "Short description of the post goes here. This is a preview text.",
+    "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum nihil natus ut nobis laudantium beatae sed autem, voluptates earum fuga culpa sunt temporibus cum rerum voluptatum reprehenderit, veniam architecto possimus. "
+  },
+  {
+    "id": 4,
+    "url": "https://www.xcitium.com/blog/wp-content/uploads/2025/07/whats-a-url.png",
+    "title": "Post Title Four",
+    "shortContent": "Short description of the post goes here. This is a preview text.",
+    "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum nihil natus ut nobis laudantium beatae sed autem, voluptates earum fuga culpa sunt temporibus cum rerum voluptatum reprehenderit, veniam architecto possimus. "
+  },
+  {
+    "id": 5,
+    "url": "https://www.xcitium.com/blog/wp-content/uploads/2025/07/whats-a-url.png",
+    "title": "Post Title Two",
+    "shortContent": "Short description of the post goes here. This is a preview text.",
+    "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum nihil natus ut nobis laudantium beatae sed autem, voluptates earum fuga culpa sunt temporibus cum rerum voluptatum reprehenderit, veniam architecto possimus. "
+  }
+]

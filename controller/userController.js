@@ -1,69 +1,97 @@
-// CRUD
-// GET get all users X
-// GET get user   => url/id    X
-// POST create user  => body X
-// PUT Update user  => url/id  + body X
-// DELETE delete user => url/id
-// GET get all users
+import fs from "fs";
+
+/* =========================
+   Helpers
+========================= */
+const DATA_FILE = "./data/users.json";
+
+// Read JSON File
+function readData() {
+  const data = fs.readFileSync(DATA_FILE, "utf8");
+  return JSON.parse(data || "[]");
+}
+
+// Write JSON File
+function writeData(data) {
+  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+}
+
+/* =========================
+   Controllers
+========================= */
 
 export const getUsers = (req, res) => {
+  const users = readData();
   res.json(users);
 };
 
 export const getUser = (req, res) => {
+  const users = readData();
   const id = parseInt(req.params.id);
 
   const user = users.find((user) => user.id === id);
+
   if (!user) {
-    res.json({ massage: "User not found" });
+    return res.status(404).json({ message: "User not found" });
   }
+
   res.json(user);
 };
 
 export const createUser = (req, res) => {
-  const user = req.body;
-  users.push(user);
-  res.json({ massage: "User added succesfully !", user: user });
+  const users = readData();
+  const newUser = req.body;
+
+  // Generate new id automatically
+  const newId = users.length > 0 ? Math.max(...users.map((u) => u.id)) + 1 : 1;
+
+  const userWithId = { id: newId, ...newUser };
+
+  users.push(userWithId);
+  writeData(users);
+
+  res.status(201).json({
+    message: "User added successfully!",
+    user: userWithId,
+  });
 };
 
 export const updateUser = (req, res) => {
+  const users = readData();
   const id = parseInt(req.params.id);
-  const newUser = req.body;
-  const user = users.find((user) => user.id === id);
-  if (!user) {
-    res.json({ massage: "User not found" });
-  }
-  const name = newUser.name;
-  const age = newUser.age;
-  if (name) user.name = name;
-  if (age) user.age = age;
+  const updatedData = req.body;
 
-  //   Object.assign(user, newUser);
-  res.json({ massage: "User updated succesfully !", user: newUser });
+  const user = users.find((user) => user.id === id);
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  Object.assign(user, updatedData);
+
+  writeData(users);
+
+  res.json({
+    message: "User updated successfully!",
+    user,
+  });
 };
 
 export const deleteUser = (req, res) => {
+  const users = readData();
   const id = parseInt(req.params.id);
 
   const user = users.find((user) => user.id === id);
+
   if (!user) {
-    res.json({ massage: "User not found" });
+    return res.status(404).json({ message: "User not found" });
   }
 
-  users = users.filter((u) => u.id !== id);
+  const filteredUsers = users.filter((u) => u.id !== id);
+  writeData(filteredUsers);
 
-  res.json({ massage: "User deleted succesfully !", user: user.name });
+  res.json({
+    message: "User deleted successfully!",
+    user: user.name,
+  });
 };
-
-let users = [
-  {
-    id: 1,
-    name: "Ahmad",
-    age: 22,
-  },
-  {
-    id: 2,
-    name: "Mohamad",
-    age: 29,
-  },
-];
