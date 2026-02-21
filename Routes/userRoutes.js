@@ -17,13 +17,9 @@ import {
 const userRoutes = Router();
 
 userRoutes.get("/", getUsers);
-
 userRoutes.get("/:id", validate(getUserSchema), getUser);
-
 userRoutes.post("/", validate(createUserSchema), createUser);
-
 userRoutes.put("/:id", validate(updateUserSchema), updateUser);
-
 userRoutes.delete("/:id", deleteUser);
 
 export default userRoutes;
