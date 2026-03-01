@@ -14,7 +14,7 @@ export const updatePostSchema = z.object({
     .object({
       url: z.string().url().optional(),
       title: z.string().min(3).optional(),
-      shortContent: z.string().min(10).optional(),
+      short_content: z.string().min(10).optional(),
       content: z.string().min(20).optional(),
     })
     .refine((data) => Object.keys(data).length > 0, {
@@ -27,7 +27,7 @@ export const createPostSchema = z.object({
     .object({
       url: z.string().url(),
       title: z.string().min(3),
-      shortContent: z.string().min(10),
+      short_content: z.string().min(10),
       content: z.string().min(20),
     })
     .refine((data) => Object.keys(data).length > 0, {

@@ -1,102 +1,87 @@
-import fs from "fs";
-
-/* =========================
-   Helpers
-========================= */
-
-const DATA_FILE = "./data/posts.json";
-
-// Read JSON File
-function readData() {
-  const data = fs.readFileSync(DATA_FILE, "utf8");
-  return JSON.parse(data || "[]");
-}
-
-// Write JSON File
-function writeData(data) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-}
-
-/* =========================
-   Controllers
-========================= */
+import pool from "../config/db.js";
 
 // GET all posts
-export const getPosts = (req, res) => {
-  const posts = readData();
-  res.json(posts);
+export const getPosts = async (req, res) => {
+  const result = await pool.query("SELECT * FROM posts ORDER BY id");
+  res.json(result.rows);
 };
 
 // GET single post
-export const getPost = (req, res) => {
-  const posts = readData();
+export const getPost = async (req, res) => {
   const id = parseInt(req.params.id);
 
-  const post = posts.find((post) => post.id === id);
+  const result = await pool.query("SELECT * FROM posts where id = $1 ", [id]);
 
-  if (!post) {
+  if (result.rows.length === 0) {
     return res.status(404).json({ message: "Post not found" });
   }
-
-  res.json(post);
+  res.json(result.rows[0]);
 };
 
 // CREATE post
-export const createPost = (req, res) => {
-  const posts = readData();
-  const newPost = req.body;
+export const createPost = async (req, res) => {
+  const { url, title, short_content, content } = req.body;
 
-  const newId = posts.length > 0 ? Math.max(...posts.map((p) => p.id)) + 1 : 1;
-
-  const postWithId = { id: newId, ...newPost };
-
-  posts.push(postWithId);
-  writeData(posts);
+  const result = await pool.query(
+    `INSERT INTO posts (url, title, short_content, content)
+   VALUES ($1,$2,$3,$4)
+   RETURNING *`,
+    [url, title, short_content, content],
+  );
 
   res.status(201).json({
     message: "Post added successfully!",
-    post: postWithId,
+    post: result.rows[0],
   });
 };
 
 // UPDATE post
-export const updatePost = (req, res) => {
-  const posts = readData();
+export const updatePost = async (req, res) => {
   const id = parseInt(req.params.id);
-  const updatedData = req.body;
+  const { url, title, short_content, content } = req.body;
 
-  const post = posts.find((post) => post.id === id);
+  const result = await pool.query(
+    `UPDATE posts
+    SET 
+    url = COALESCE($1,url),
+    title = COALESCE($2,title),
+    short_content = COALESCE($3,short_content),
+    content = COALESCE($4,content)
+    where id = $5
+    RETURNING *`,
+    [url, title, short_content, content, id],
+  );
 
-  if (!post) {
+  if (result.rows.length === 0) {
     return res.status(404).json({ message: "Post not found" });
   }
-
-  Object.assign(post, updatedData);
-
-  writeData(posts);
 
   res.json({
     message: "Post updated successfully!",
-    post,
+    post: result.rows[0],
   });
 };
 
+/**
+DROP TABLE posts حذف  جدول 
+TRUNCATE TABLE posts  حذف الداتا كاملة من الجدلة 
+DELETE FROM  posts where id = 3   حذف عنصر حسب الاي دي او بدون اي دي حذف الجميع
+*/
+
 // DELETE post
-export const deletePost = (req, res) => {
-  const posts = readData();
+export const deletePost = async (req, res) => {
   const id = parseInt(req.params.id);
+  const result = await pool.query(
+    "DELETE FROM posts where id = $1 RETURNING *",
+    [id],
+  );
 
-  const post = posts.find((post) => post.id === id);
-
-  if (!post) {
+  if (result.rows.length === 0) {
     return res.status(404).json({ message: "Post not found" });
   }
 
-  const filteredPosts = posts.filter((p) => p.id !== id);
-  writeData(filteredPosts);
-
   res.json({
     message: "Post deleted successfully!",
-    post: post.title,
+    post: result.rows[0],
   });
 };
