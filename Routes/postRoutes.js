@@ -13,10 +13,11 @@ import {
   updatePostSchema,
   createPostSchema,
 } from "../validators/postSchema.js";
+import auth from "../middleware/auth.js";
 
 const postRoutes = Router();
 
-postRoutes.get("/", getPosts);
+postRoutes.get("/", auth, getPosts);
 
 postRoutes.get("/:id", validate(getPostSchema), getPost);
 
