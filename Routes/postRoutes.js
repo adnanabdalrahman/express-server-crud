@@ -13,16 +13,9 @@ import {
   updatePostSchema,
   createPostSchema,
 } from "../validators/postSchema.js";
+import auth from "../middleware/auth.js";
 
 const postRoutes = Router();
-
-postRoutes.get("/", getPosts);
-
-postRoutes.get("/:id", validate(getPostSchema), getPost);
-
-postRoutes.post("/", auth, validate(createPostSchema), createPost);
-
-postRoutes.put("/:id", auth, validate(updatePostSchema), updatePost);
 
 postRoutes.post(
   "/",
@@ -30,13 +23,19 @@ postRoutes.post(
   validate(createPostSchema),
   createPost,
 );
-
 postRoutes.put(
   "/:id",
   upload.single("image"),
   validate(updatePostSchema),
   updatePost,
 );
+postRoutes.get("/", getPosts);
+
+postRoutes.get("/:id", validate(getPostSchema), getPost);
+
+postRoutes.post("/", auth, validate(createPostSchema), createPost);
+
+postRoutes.put("/:id", auth, validate(updatePostSchema), updatePost);
 
 postRoutes.delete("/:id", auth, deletePost);
 

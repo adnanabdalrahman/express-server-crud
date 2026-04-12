@@ -1,6 +1,5 @@
 import express from "express";
-import userRoutes from "./routes/userRoutes.js";
-import postRoutes from "./routes/postRoutes.js";
+import postRoutes from "./Routes/postRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import cors from "cors";
 import "dotenv/config";
@@ -17,7 +16,6 @@ app.use("/uploads", express.static("uploads"));
 //   next();
 // });
 
-app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 app.use("/auth", authRoutes);
 

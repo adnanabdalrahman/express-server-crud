@@ -12,9 +12,11 @@ export const updatePostSchema = z.object({
   }),
   body: z
     .object({
-      title: z.string().min(3).optional(),
-      short_content: z.string().min(10).optional(),
-      content: z.string().min(20).optional(),
+      title: z.string().min(3, "Title must be at least 3 characters"),
+      short_content: z
+        .string()
+        .min(10, "Short content must be at least 10 characters"),
+      content: z.string().min(20, "Content must be at least 20 characters"),
     })
     .refine((data) => Object.keys(data).length > 0, {
       message: "At least one field must be provided for update",
