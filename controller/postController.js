@@ -1,4 +1,6 @@
 import prisma from "../config/prisma.js";
+import fs from "fs";
+import path from "path";
 
 // GET all posts
 export const getPosts = async (req, res) => {
@@ -23,41 +25,68 @@ export const getPost = async (req, res) => {
 
 // CREATE post
 export const createPost = async (req, res) => {
-  const { url, title, short_content, content } = req.body;
+  const { title, short_content, content } = req.body;
+  
+  const imageUrl = req.file ? `/uploads/images/${req.file.filename}` : null;
+
   const post = await prisma.post.create({
     data: {
-      url,
       title,
       short_content,
       content,
+      url: imageUrl,
     },
   });
 
   res.status(201).json({
-    message: "Post added successfully!",
-    post: post,
+    message: "Post created successfully",
+    post,
   });
 };
 
-// UPDATE post
 export const updatePost = async (req, res) => {
   const id = parseInt(req.params.id);
-  const { url, title, short_content, content } = req.body;
+  const { title, short_content, content } = req.body;
 
   try {
+    // get current post
+    const existingPost = await prisma.post.findUnique({
+      where: { id },
+    });
+
+    if (!existingPost) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    let imageUrl = existingPost.url;
+
+    // if new image uploaded
+    if (req.file) {
+      imageUrl = `/uploads/images/${req.file.filename}`;
+
+      // delete old image
+      if (existingPost.url) {
+        const oldImagePath = path.join(process.cwd(), existingPost.url);
+
+        fs.unlink(oldImagePath, (err) => {
+          if (err) console.log("Old image not deleted:", err);
+        });
+      }
+    }
+
     const post = await prisma.post.update({
       where: { id },
       data: {
-        url,
         title,
         short_content,
         content,
+        url: imageUrl,
       },
     });
 
     res.json({
       message: "Post updated successfully!",
-      post: post,
+      post,
     });
   } catch (error) {
     res.status(404).json({ message: "Post not found" });
@@ -67,13 +96,23 @@ export const updatePost = async (req, res) => {
 // DELETE post
 export const deletePost = async (req, res) => {
   const id = parseInt(req.params.id);
+
   try {
     const post = await prisma.post.delete({
       where: { id },
     });
+
+    if (post.url) {
+      const imagePath = path.join(process.cwd(), post.url);
+
+      fs.unlink(imagePath, (err) => {
+        if (err) console.log("Image not deleted:", err);
+      });
+    }
+
     res.json({
       message: "Post deleted successfully!",
-      post: post,
+      post,
     });
   } catch (error) {
     res.status(404).json({ message: "Post not found" });

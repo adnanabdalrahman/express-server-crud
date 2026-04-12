@@ -6,24 +6,33 @@ import {
   updatePost,
   deletePost,
 } from "../controller/postController.js";
-
+import { upload } from "../middleware/upload.js";
 import validate from "../middleware/validate.js";
 import {
   getPostSchema,
   updatePostSchema,
   createPostSchema,
 } from "../validators/postSchema.js";
-import auth from "../middleware/auth.js";
 
 const postRoutes = Router();
 
-postRoutes.get("/", auth, getPosts);
+postRoutes.get("/", getPosts);
 
 postRoutes.get("/:id", validate(getPostSchema), getPost);
 
-postRoutes.post("/", validate(createPostSchema), createPost);
+postRoutes.post(
+  "/",
+  upload.single("image"),
+  validate(createPostSchema),
+  createPost,
+);
 
-postRoutes.put("/:id", validate(updatePostSchema), updatePost);
+postRoutes.put(
+  "/:id",
+  upload.single("image"),
+  validate(updatePostSchema),
+  updatePost,
+);
 
 postRoutes.delete("/:id", deletePost);
 

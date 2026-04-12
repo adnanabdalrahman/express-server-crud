@@ -12,7 +12,6 @@ export const updatePostSchema = z.object({
   }),
   body: z
     .object({
-      url: z.string().url().optional(),
       title: z.string().min(3).optional(),
       short_content: z.string().min(10).optional(),
       content: z.string().min(20).optional(),
@@ -25,7 +24,6 @@ export const updatePostSchema = z.object({
 export const createPostSchema = z.object({
   body: z
     .object({
-      url: z.string().url(),
       title: z.string().min(3),
       short_content: z.string().min(10),
       content: z.string().min(20),
