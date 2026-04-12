@@ -17,14 +17,14 @@ import auth from "../middleware/auth.js";
 
 const postRoutes = Router();
 
-postRoutes.get("/", auth, getPosts);
+postRoutes.get("/", getPosts);
 
 postRoutes.get("/:id", validate(getPostSchema), getPost);
 
-postRoutes.post("/", validate(createPostSchema), createPost);
+postRoutes.post("/", auth, validate(createPostSchema), createPost);
 
-postRoutes.put("/:id", validate(updatePostSchema), updatePost);
+postRoutes.put("/:id", auth, validate(updatePostSchema), updatePost);
 
-postRoutes.delete("/:id", deletePost);
+postRoutes.delete("/:id", auth, deletePost);
 
 export default postRoutes;
