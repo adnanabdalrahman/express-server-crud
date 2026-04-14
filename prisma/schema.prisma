@@ -13,7 +13,7 @@ datasource db {
 }
 model Post {
   id            Int      @id @default(autoincrement())
-  url           String
+  url           String?
   title         String
   short_content String?
   content       String?
@@ -27,6 +27,7 @@ model User {
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 

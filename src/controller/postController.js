@@ -26,7 +26,7 @@ export const getPost = async (req, res) => {
 // CREATE post
 export const createPost = async (req, res) => {
   const { title, short_content, content } = req.body;
-  
+
   const imageUrl = req.file ? `/uploads/images/${req.file.filename}` : null;
 
   const post = await prisma.post.create({

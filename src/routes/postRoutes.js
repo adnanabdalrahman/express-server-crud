@@ -19,12 +19,14 @@ const postRoutes = Router();
 
 postRoutes.post(
   "/",
+  auth,
   upload.single("image"),
   validate(createPostSchema),
   createPost,
 );
 postRoutes.put(
   "/:id",
+  auth,
   upload.single("image"),
   validate(updatePostSchema),
   updatePost,
@@ -32,10 +34,6 @@ postRoutes.put(
 postRoutes.get("/", getPosts);
 
 postRoutes.get("/:id", validate(getPostSchema), getPost);
-
-postRoutes.post("/", auth, validate(createPostSchema), createPost);
-
-postRoutes.put("/:id", auth, validate(updatePostSchema), updatePost);
 
 postRoutes.delete("/:id", auth, deletePost);
 

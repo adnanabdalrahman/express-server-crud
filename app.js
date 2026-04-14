@@ -1,6 +1,6 @@
 import express from "express";
-import postRoutes from "./Routes/postRoutes.js";
-import authRoutes from "./routes/authRoutes.js";
+import postRoutes from "./src/routes/postRoutes.js";
+import authRoutes from "./src/routes/authRoutes.js";
 import cors from "cors";
 import "dotenv/config";
 
@@ -8,6 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use("/uploads", express.static("uploads"));
+
 // app.use((req, res, next) => {
 //   const path = req.path;
 //   if (path != "/users/1") {
@@ -19,7 +20,4 @@ app.use("/uploads", express.static("uploads"));
 app.use("/posts", postRoutes);
 app.use("/auth", authRoutes);
 
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log("Server is running on Port 3000");
-});
+export default app;
