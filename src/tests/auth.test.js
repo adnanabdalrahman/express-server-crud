@@ -11,6 +11,8 @@ describe("Auth API", () => {
     await prisma.$disconnect();
   });
   const email = `test${Date.now()}@test.com`;
+
+
   it("should register a new user", async () => {
     const res = await request(app).post("/auth/register").send({
       name: "Test User",
@@ -21,6 +23,8 @@ describe("Auth API", () => {
     expect(res.statusCode).toBe(201);
     expect(res.body.user).toHaveProperty("email", email);
   });
+
+
 
   it("should login user", async () => {
     // create user first
@@ -39,12 +43,16 @@ describe("Auth API", () => {
     expect(res.body).toHaveProperty("token");
   });
 
+  
   it("should fail without token", async () => {
     const res = await request(app).get("/auth/profile/me");
     expect(res.statusCode).toBe(401);
   });
+  
+
 
   it("should get profile with token", async () => {
+    
     await request(app).post("/auth/register").send({
       name: "Test User",
       email: email,

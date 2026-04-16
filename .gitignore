@@ -26,3 +26,4 @@ dist-ssr
 /src//uploads/images/
 /src/public/uploads/
 /generated/prisma
+.env
